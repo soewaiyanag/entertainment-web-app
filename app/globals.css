@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Design system colors */
+  --color-blue-950: #10141e;
+  --color-blue-900: #161d2f;
+  --color-blue-500: #5a698f;
+  --color-red-500: #fc4747;
+
+  /* Font */
+  --font-sans: var(--font-outfit);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #10141e;
+  color: #ffffff;
+  font-family: var(--font-outfit), sans-serif;
+}
+
+/* Typography presets — mobile first, desktop overrides at 1024px */
+@layer components {
+  /* Preset 1 — page headings */
+  .text-preset-1 {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.25;
+    letter-spacing: -0.01875rem; /* -0.3px */
+    font-weight: 300;
+  }
+
+  /* Preset 2 — section headings, medium weight */
+  .text-preset-2 {
+    font-size: 1rem; /* 16px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  /* Preset 2 light — section headings, light weight */
+  .text-preset-2-light {
+    font-size: 1rem; /* 16px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 300;
+  }
+
+  /* Preset 3 — card titles */
+  .text-preset-3 {
+    font-size: 0.9375rem; /* 15px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  /* Preset 4 — metadata, secondary text */
+  .text-preset-4 {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 300;
+  }
+
+  /* Preset 5 — labels, small text */
+  .text-preset-5 {
+    font-size: 0.75rem; /* 12px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 300;
+  }
+
+  /* Preset 6 — smallest text */
+  .text-preset-6 {
+    font-size: 0.6875rem; /* 11px */
+    line-height: 1.25;
+    letter-spacing: 0;
+    font-weight: 300;
+  }
+
+  /* Desktop overrides */
+  @media (min-width: 1024px) {
+    .text-preset-1 {
+      font-size: 2rem; /* 32px */
+      letter-spacing: -0.03125rem; /* -0.5px */
+    }
+
+    .text-preset-2 {
+      font-size: 1.5rem; /* 24px */
+    }
+
+    .text-preset-2-light {
+      font-size: 1.5rem; /* 24px */
+    }
+
+    .text-preset-3 {
+      font-size: 1.125rem; /* 18px */
+    }
+
+    .text-preset-4 {
+      font-size: 0.9375rem; /* 15px */
+    }
+
+    .text-preset-5 {
+      font-size: 0.8125rem; /* 13px */
+    }
+  }
 }

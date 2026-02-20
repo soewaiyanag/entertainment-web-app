@@ -1,5 +1,6 @@
 [
   {
+    "slug": "beyond-earth",
     "title": "Beyond Earth",
     "thumbnail": {
       "trending": {
@@ -19,6 +20,7 @@
     "isTrending": true
   },
   {
+    "slug": "bottom-gear",
     "title": "Bottom Gear",
     "thumbnail": {
       "trending": {
@@ -38,6 +40,7 @@
     "isTrending": true
   },
   {
+    "slug": "undiscovered-cities",
     "title": "Undiscovered Cities",
     "thumbnail": {
       "trending": {
@@ -57,6 +60,7 @@
     "isTrending": true
   },
   {
+    "slug": "1998",
     "title": "1998",
     "thumbnail": {
       "trending": {
@@ -76,6 +80,7 @@
     "isTrending": true
   },
   {
+    "slug": "dark-side-of-the-moon",
     "title": "Dark Side of the Moon",
     "thumbnail": {
       "trending": {
@@ -95,6 +100,7 @@
     "isTrending": true
   },
   {
+    "slug": "the-great-lands",
     "title": "The Great Lands",
     "thumbnail": {
       "regular": {
@@ -110,6 +116,7 @@
     "isTrending": false
   },
   {
+    "slug": "the-diary",
     "title": "The Diary",
     "thumbnail": {
       "regular": {
@@ -125,7 +132,8 @@
     "isTrending": false
   },
   {
-    "title": "Earth’s Untouched",
+    "slug": "earths-untouched",
+    "title": "Earth's Untouched",
     "thumbnail": {
       "regular": {
         "small": "./assets/thumbnails/earths-untouched/regular/small.jpg",
@@ -140,6 +148,7 @@
     "isTrending": false
   },
   {
+    "slug": "no-land-beyond",
     "title": "No Land Beyond",
     "thumbnail": {
       "regular": {
@@ -155,6 +164,7 @@
     "isTrending": false
   },
   {
+    "slug": "during-the-hunt",
     "title": "During the Hunt",
     "thumbnail": {
       "regular": {
@@ -170,6 +180,7 @@
     "isTrending": false
   },
   {
+    "slug": "autosport-the-series",
     "title": "Autosport the Series",
     "thumbnail": {
       "regular": {
@@ -185,6 +196,7 @@
     "isTrending": false
   },
   {
+    "slug": "same-answer-2",
     "title": "Same Answer II",
     "thumbnail": {
       "regular": {
@@ -200,6 +212,7 @@
     "isTrending": false
   },
   {
+    "slug": "below-echo",
     "title": "Below Echo",
     "thumbnail": {
       "regular": {
@@ -215,6 +228,7 @@
     "isTrending": false
   },
   {
+    "slug": "the-rockies",
     "title": "The Rockies",
     "thumbnail": {
       "regular": {
@@ -230,6 +244,7 @@
     "isTrending": false
   },
   {
+    "slug": "relentless",
     "title": "Relentless",
     "thumbnail": {
       "regular": {
@@ -245,6 +260,7 @@
     "isTrending": false
   },
   {
+    "slug": "community-of-ours",
     "title": "Community of Ours",
     "thumbnail": {
       "regular": {
@@ -260,6 +276,7 @@
     "isTrending": false
   },
   {
+    "slug": "van-life",
     "title": "Van Life",
     "thumbnail": {
       "regular": {
@@ -275,6 +292,7 @@
     "isTrending": false
   },
   {
+    "slug": "the-heiress",
     "title": "The Heiress",
     "thumbnail": {
       "regular": {
@@ -290,6 +308,7 @@
     "isTrending": false
   },
   {
+    "slug": "off-the-track",
     "title": "Off the Track",
     "thumbnail": {
       "regular": {
@@ -305,6 +324,7 @@
     "isTrending": false
   },
   {
+    "slug": "whispering-hill",
     "title": "Whispering Hill",
     "thumbnail": {
       "regular": {
@@ -320,6 +340,7 @@
     "isTrending": false
   },
   {
+    "slug": "112",
     "title": "112",
     "thumbnail": {
       "regular": {
@@ -335,6 +356,7 @@
     "isTrending": false
   },
   {
+    "slug": "lone-heart",
     "title": "Lone Heart",
     "thumbnail": {
       "regular": {
@@ -350,6 +372,7 @@
     "isTrending": false
   },
   {
+    "slug": "production-line",
     "title": "Production Line",
     "thumbnail": {
       "regular": {
@@ -365,6 +388,7 @@
     "isTrending": false
   },
   {
+    "slug": "dogs",
     "title": "Dogs",
     "thumbnail": {
       "regular": {
@@ -380,6 +404,7 @@
     "isTrending": false
   },
   {
+    "slug": "asia-in-24-days",
     "title": "Asia in 24 Days",
     "thumbnail": {
       "regular": {
@@ -395,6 +420,7 @@
     "isTrending": false
   },
   {
+    "slug": "the-tasty-tour",
     "title": "The Tasty Tour",
     "thumbnail": {
       "regular": {
@@ -410,6 +436,7 @@
     "isTrending": false
   },
   {
+    "slug": "darker",
     "title": "Darker",
     "thumbnail": {
       "regular": {
@@ -425,6 +452,7 @@
     "isTrending": false
   },
   {
+    "slug": "unresolved-cases",
     "title": "Unresolved Cases",
     "thumbnail": {
       "regular": {
@@ -440,6 +468,7 @@
     "isTrending": false
   },
   {
+    "slug": "mission-saturn",
     "title": "Mission: Saturn",
     "thumbnail": {
       "regular": {
