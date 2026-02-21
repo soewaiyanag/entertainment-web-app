@@ -7,22 +7,18 @@ interface BookmarkState {
 interface BookmarkActions {
   addBookmark: (slug: string) => void;
   removeBookmark: (slug: string) => void;
-  setBookmarks: () => void;
+  setBookmarks: (slugs: string[]) => void;
 }
 
 const useBookmark = create<BookmarkState & BookmarkActions>((set) => ({
   bookmarks: [],
-  addBookmark: (slug: string) =>
-    set((state) => {
-      return {
-        bookmarks: [...state.bookmarks, slug],
-      };
-    }),
-  removeBookmark: (slug: string) =>
+  addBookmark: (slug) =>
+    set((state) => ({ bookmarks: [...state.bookmarks, slug] })),
+  removeBookmark: (slug) =>
     set((state) => ({
-      bookmarks: state.bookmarks.filter((bookmark) => bookmark !== slug),
+      bookmarks: state.bookmarks.filter((b) => b !== slug),
     })),
-  setBookmarks: () => {},
+  setBookmarks: (slugs) => set({ bookmarks: slugs }),
 }));
 
 export default useBookmark;
