@@ -12,7 +12,7 @@ export async function getBookmarksAction(): Promise<string[]> {
     select: { showSlug: true },
   });
 
-  return bookmarks.map((b) => b.showSlug);
+  return bookmarks.map((b: { showSlug: string }) => b.showSlug);
 }
 
 export async function toggleBookmarkAction(slug: string): Promise<void> {
