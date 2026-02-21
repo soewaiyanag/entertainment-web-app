@@ -53,3 +53,5 @@ next-env.d.ts
 
 # Local notes
 NOTES.md
+
+/app/generated/prisma
