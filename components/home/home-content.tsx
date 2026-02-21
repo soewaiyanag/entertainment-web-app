@@ -40,7 +40,7 @@ export default function HomeContent() {
         <>
           <section className="flex flex-col gap-4 lg:gap-6">
             <h2 className="text-preset-1 text-white">Trending</h2>
-            <div className="flex gap-4 lg:gap-10 overflow-x-auto scrollbar-hide -mx-4 px-4 md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
+            <div className="flex gap-4 md:gap-10 overflow-x-auto scrollbar-hide -mx-4 px-4 md:-mx-6 md:px-6 lg:mx-0 lg:px-0">
               {trendingShows.map((show) => (
                 <TrendingCard key={show.slug} show={show} />
               ))}

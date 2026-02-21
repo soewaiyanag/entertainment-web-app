@@ -76,6 +76,15 @@ body {
     font-weight: 300;
   }
 
+  /* Scrollbar hide — used in trending horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Desktop overrides */
   @media (min-width: 1024px) {
     .text-preset-1 {
