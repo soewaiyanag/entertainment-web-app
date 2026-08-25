@@ -1,13 +1,13 @@
-import data from "@/data.json";
-import { Show } from "@/types/show.type";
 import CategoryContent from "@/components/shows/category-content";
+import { getPopular } from "@/lib/tmdb";
 
-const tvSeries = (data as Show[]).filter((s) => s.category === "TV Series");
+export default async function TVSeriesPage() {
+  const tvSeries = await getPopular("tv");
 
-export default function TVSeriesPage() {
   return (
     <CategoryContent
       shows={tvSeries}
+      mediaType="tv"
       heading="TV Series"
       searchPlaceholder="Search for TV series"
     />

@@ -1,23 +1,39 @@
 "use client";
 
-import { useState } from "react";
-import data from "@/data.json";
+import { useEffect, useState, useTransition } from "react";
 import { Show } from "@/types/show.type";
+import { searchShowsAction } from "@/app/actions/shows";
 import SearchBar from "@/components/ui/search-bar";
 import TrendingCard from "@/components/shows/trending-card";
 import ShowCard from "@/components/shows/show-card";
 
-const shows = data as Show[];
-const trendingShows = shows.filter((s) => s.isTrending);
-const recommendedShows = shows.filter((s) => !s.isTrending);
+interface HomeContentProps {
+  trendingShows: Show[];
+  recommendedShows: Show[];
+}
 
-export default function HomeContent() {
+export default function HomeContent({
+  trendingShows,
+  recommendedShows,
+}: HomeContentProps) {
   const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Show[]>([]);
+  const [isPending, startTransition] = useTransition();
 
-  const trimmed = query.trim().toLowerCase();
-  const searchResults = trimmed
-    ? shows.filter((s) => s.title.toLowerCase().includes(trimmed))
-    : [];
+  const trimmed = query.trim();
+
+  useEffect(() => {
+    if (!trimmed) return;
+
+    const timeout = setTimeout(() => {
+      startTransition(async () => {
+        const results = await searchShowsAction(trimmed);
+        setSearchResults(results);
+      });
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [trimmed]);
 
   return (
     <div className="flex flex-col gap-6 lg:gap-10">
@@ -26,9 +42,11 @@ export default function HomeContent() {
       {trimmed ? (
         <section className="flex flex-col gap-4 lg:gap-8">
           <h2 className="text-preset-1 text-white">
-            Found {searchResults.length} result
-            {searchResults.length !== 1 ? "s" : ""} for &apos;{query.trim()}
-            &apos;
+            {isPending
+              ? "Searching…"
+              : `Found ${searchResults.length} result${
+                  searchResults.length !== 1 ? "s" : ""
+                } for ‘${trimmed}’`}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-x-6 lg:gap-x-10 lg:gap-y-6">
             {searchResults.map((show) => (

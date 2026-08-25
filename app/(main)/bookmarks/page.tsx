@@ -1,25 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import data from "@/data.json";
+import { useEffect, useState } from "react";
 import { Show } from "@/types/show.type";
 import useBookmarkStore from "@/stores/bookmark.store";
+import { getBookmarkedShowsAction } from "@/app/actions/shows";
 import SearchBar from "@/components/ui/search-bar";
 import ShowCard from "@/components/shows/show-card";
 
-const allShows = data as Show[];
-
-const GRID = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-x-6 lg:gap-x-10 lg:gap-y-6";
+const GRID =
+  "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-x-6 lg:gap-x-10 lg:gap-y-6";
 
 export default function BookmarksPage() {
   const { bookmarks } = useBookmarkStore();
+  const [shows, setShows] = useState<Show[]>([]);
   const [query, setQuery] = useState("");
 
-  const bookmarked = allShows.filter((s) => bookmarks.includes(s.slug));
+  useEffect(() => {
+    getBookmarkedShowsAction(bookmarks).then(setShows);
+  }, [bookmarks]);
+
   const trimmed = query.trim().toLowerCase();
 
   if (trimmed) {
-    const results = bookmarked.filter((s) =>
+    const results = shows.filter((s) =>
       s.title.toLowerCase().includes(trimmed)
     );
     return (
@@ -44,8 +47,8 @@ export default function BookmarksPage() {
     );
   }
 
-  const movies = bookmarked.filter((s) => s.category === "Movie");
-  const tvSeries = bookmarked.filter((s) => s.category === "TV Series");
+  const movies = shows.filter((s) => s.category === "Movie");
+  const tvSeries = shows.filter((s) => s.category === "TV Series");
 
   return (
     <div className="flex flex-col gap-6 lg:gap-10">
@@ -55,7 +58,7 @@ export default function BookmarksPage() {
         placeholder="Search for bookmarked shows"
       />
 
-      {bookmarked.length === 0 && (
+      {shows.length === 0 && (
         <p className="text-preset-2-light text-white/50 text-center mt-16">
           No bookmarks yet.
         </p>

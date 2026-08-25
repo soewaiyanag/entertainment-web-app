@@ -14,7 +14,7 @@ export default function ShowCard({ show }: ShowCardProps) {
       ? "/assets/icon-category-movie.svg"
       : "/assets/icon-category-tv.svg";
 
-  const imageSrc = show.thumbnail.regular.large.replace("./", "/");
+  const imageSrc = show.thumbnail.regular.large;
 
   return (
     <div className="flex flex-col gap-2">

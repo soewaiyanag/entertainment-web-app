@@ -14,7 +14,7 @@ export default function TrendingCard({ show }: TrendingCardProps) {
       ? "/assets/icon-category-movie.svg"
       : "/assets/icon-category-tv.svg";
 
-  const imageSrc = show.thumbnail.trending!.large.replace("./", "/");
+  const imageSrc = show.thumbnail.trending!.large;
 
   return (
     <div className="relative shrink-0 w-[240px] h-[140px] md:w-[470px] md:h-[230px] rounded-lg overflow-hidden">

@@ -14,7 +14,7 @@ export interface Show {
   };
   year: number;
   category: "Movie" | "TV Series";
-  rating: "PG" | "E" | "18+";
+  rating: string;
   isBookmarked: boolean;
   isTrending: boolean;
 }
