@@ -75,7 +75,7 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-blue-950/80 via-blue-950/10 to-transparent" />
 
           {/* Overlaid title/meta/CTA */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 lg:gap-4 p-4 md:p-8 lg:p-12 max-w-2xl">
+          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 lg:gap-4 pb-4 md:pb-8 lg:pb-12 max-w-2xl">
             <h1 className="text-preset-1 text-white">{show.title}</h1>
 
             {show.tagline && (
