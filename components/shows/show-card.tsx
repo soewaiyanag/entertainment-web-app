@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Show } from "@/types/show.type";
 import BookmarkButton from "./bookmark-button";
 
@@ -17,7 +18,7 @@ export default function ShowCard({ show }: ShowCardProps) {
   const imageSrc = show.thumbnail.regular.large;
 
   return (
-    <div className="flex flex-col gap-2">
+    <Link href={`/show/${show.slug}`} className="flex flex-col gap-2">
       {/* Image */}
       <div className="relative w-full h-[110px] md:h-[140px] lg:h-[174px] rounded-lg overflow-hidden group">
         <Image
@@ -54,6 +55,6 @@ export default function ShowCard({ show }: ShowCardProps) {
         </div>
         <p className="text-preset-3 text-white">{show.title}</p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -21,6 +21,39 @@ interface TMDbListResponse {
   results: TMDbRawItem[];
 }
 
+interface TMDbCastMember {
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+interface TMDbDetailRaw extends TMDbRawItem {
+  overview?: string;
+  tagline?: string;
+  genres?: { id: number; name: string }[];
+  vote_average?: number;
+  runtime?: number; // movies, in minutes
+  episode_run_time?: number[]; // tv, in minutes
+  number_of_seasons?: number; // tv
+  credits?: { cast: TMDbCastMember[] };
+}
+
+export interface CastMember {
+  name: string;
+  character: string;
+  profileImage?: string;
+}
+
+export interface ShowDetail extends Show {
+  overview: string;
+  tagline?: string;
+  genres: string[];
+  voteAverage: number;
+  runtimeLabel?: string;
+  heroImage?: string;
+  cast: CastMember[];
+}
+
 async function tmdbFetch<T>(
   path: string,
   params: Record<string, string> = {}
@@ -133,6 +166,52 @@ async function getShowById(
   } catch {
     return null;
   }
+}
+
+export async function getShowDetail(
+  compositeSlug: string
+): Promise<ShowDetail | null> {
+  const [mediaType, id] = compositeSlug.split("-");
+  if (mediaType !== "movie" && mediaType !== "tv") return null;
+
+  let raw: TMDbDetailRaw;
+  try {
+    raw = await tmdbFetch<TMDbDetailRaw>(`/${mediaType}/${id}`, {
+      append_to_response: "credits",
+    });
+  } catch {
+    return null;
+  }
+
+  const base = mapToShow(raw, mediaType);
+  if (!base) return null;
+
+  const runtimeMinutes =
+    mediaType === "movie" ? raw.runtime : raw.episode_run_time?.[0];
+
+  const runtimeLabel =
+    mediaType === "movie"
+      ? runtimeMinutes
+        ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m`
+        : undefined
+      : raw.number_of_seasons
+        ? `${raw.number_of_seasons} season${raw.number_of_seasons !== 1 ? "s" : ""}`
+        : undefined;
+
+  return {
+    ...base,
+    overview: raw.overview ?? "",
+    tagline: raw.tagline || undefined,
+    genres: raw.genres?.map((g) => g.name) ?? [],
+    voteAverage: raw.vote_average ?? 0,
+    runtimeLabel,
+    heroImage: tmdbImage(raw.backdrop_path, "w1280"),
+    cast: (raw.credits?.cast ?? []).slice(0, 10).map((c) => ({
+      name: c.name,
+      character: c.character,
+      profileImage: tmdbImage(c.profile_path, "w185"),
+    })),
+  };
 }
 
 export async function getShowsByCompositeIds(

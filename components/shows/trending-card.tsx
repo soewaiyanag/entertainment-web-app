@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Show } from "@/types/show.type";
 import BookmarkButton from "./bookmark-button";
 
@@ -17,7 +18,10 @@ export default function TrendingCard({ show }: TrendingCardProps) {
   const imageSrc = show.thumbnail.trending!.large;
 
   return (
-    <div className="relative shrink-0 w-[240px] h-[140px] md:w-[470px] md:h-[230px] rounded-lg overflow-hidden">
+    <Link
+      href={`/show/${show.slug}`}
+      className="relative block shrink-0 w-[240px] h-[140px] md:w-[470px] md:h-[230px] rounded-lg overflow-hidden group"
+    >
       {/* Background image */}
       <Image
         src={imageSrc}
@@ -26,6 +30,9 @@ export default function TrendingCard({ show }: TrendingCardProps) {
         className="object-cover"
         sizes="(max-width: 768px) 240px, 470px"
       />
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
 
       {/* Bookmark button */}
       <div className="absolute top-2 right-2 md:top-4 md:right-6">
@@ -53,6 +60,6 @@ export default function TrendingCard({ show }: TrendingCardProps) {
           <p className="text-preset-2 text-white">{show.title}</p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
