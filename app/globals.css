@@ -85,6 +85,20 @@ body {
     display: none;
   }
 
+  /* Wiggle — used on the loading screen's play icon */
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-10deg) scale(1);
+    }
+    50% {
+      transform: rotate(10deg) scale(1.15);
+    }
+  }
+  .animate-wiggle {
+    animation: wiggle 0.7s ease-in-out infinite;
+  }
+
   /* Desktop overrides */
   @media (min-width: 1024px) {
     .text-preset-1 {

@@ -9,7 +9,7 @@ export default function LoadingScreen() {
           width={16}
           height={16}
           alt=""
-          className="ml-0.5"
+          className="ml-0.5 animate-wiggle"
         />
       </div>
       <p className="text-preset-4 text-blue-500">Loading…</p>
