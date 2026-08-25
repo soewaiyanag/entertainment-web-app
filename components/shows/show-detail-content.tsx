@@ -55,22 +55,11 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
         {/* Hero backdrop */}
         {show.heroImage && (
           <div className="relative w-full h-[180px] md:h-[320px] lg:h-[420px] rounded-lg overflow-hidden bg-blue-900">
-            {/* Blurred, scaled-up fill so the box never shows empty space
-                around the real image below — purely decorative. */}
             <Image
               src={show.heroImage}
               fill
               alt=""
-              aria-hidden="true"
-              className="object-cover scale-110 blur-2xl opacity-60"
-              sizes="100vw"
-            />
-            {/* The actual backdrop, shown in full — nothing cropped off. */}
-            <Image
-              src={show.heroImage}
-              fill
-              alt=""
-              className="object-contain"
+              className="object-cover"
               sizes="100vw"
               priority
               onLoad={() => setHeroLoaded(true)}
