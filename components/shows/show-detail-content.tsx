@@ -20,9 +20,9 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
   const categoryIcon = getCategoryIcon(show.category);
 
   return (
-    <div className="relative min-h-[60vh]">
+    <>
       {!ready && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-blue-950">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-blue-950">
           <LoadingScreen />
         </div>
       )}
@@ -180,6 +180,6 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
           </section>
         )}
       </div>
-    </div>
+    </>
   );
 }
