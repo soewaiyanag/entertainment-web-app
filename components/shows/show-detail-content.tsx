@@ -12,23 +12,28 @@ interface ShowDetailContentProps {
   show: ShowDetail;
 }
 
+function Dot() {
+  return <span className="size-[3px] rounded-full bg-white/75 shrink-0" />;
+}
+
 export default function ShowDetailContent({ show }: ShowDetailContentProps) {
   const [heroLoaded, setHeroLoaded] = useState(!show.heroImage);
-  const [posterLoaded, setPosterLoaded] = useState(false);
-  const ready = heroLoaded && posterLoaded;
-
   const categoryIcon = getCategoryIcon(show.category);
+
+  // Fall back to a blurred poster as the backdrop when TMDb has no
+  // dedicated backdrop image, so the hero never renders empty.
+  const backdropSrc = show.heroImage ?? show.thumbnail.regular.large;
 
   return (
     <>
-      {!ready && (
+      {!heroLoaded && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-blue-950">
           <LoadingScreen />
         </div>
       )}
 
       <div
-        className={`flex flex-col gap-6 lg:gap-10 ${ready ? "" : "invisible"}`}
+        className={`flex flex-col gap-8 lg:gap-12 ${heroLoaded ? "" : "invisible"}`}
       >
         <Link
           href="/"
@@ -52,70 +57,51 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
           Back
         </Link>
 
-        {/* Hero backdrop */}
-        {show.heroImage && (
-          <div className="relative w-full h-[180px] md:h-[320px] lg:h-[420px] rounded-lg overflow-hidden bg-blue-900">
-            <Image
-              src={show.heroImage}
-              fill
-              alt=""
-              className="object-cover"
-              sizes="100vw"
-              priority
-              onLoad={() => setHeroLoaded(true)}
-              onError={() => setHeroLoaded(true)}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-950 via-blue-950/10 to-transparent" />
-          </div>
-        )}
+        {/* Hero */}
+        <div className="relative w-full h-[420px] md:h-[500px] lg:h-[600px] rounded-lg overflow-hidden bg-blue-900">
+          <Image
+            src={backdropSrc}
+            fill
+            alt=""
+            className={`object-cover ${show.heroImage ? "" : "scale-110 blur-lg opacity-50"}`}
+            sizes="100vw"
+            priority
+            onLoad={() => setHeroLoaded(true)}
+            onError={() => setHeroLoaded(true)}
+          />
 
-        <div className="flex flex-col md:flex-row gap-6 lg:gap-10">
-          {/* Poster */}
-          <div
-            className={`relative w-[140px] md:w-[200px] lg:w-[240px] aspect-[2/3] rounded-lg overflow-hidden shrink-0 mx-auto md:mx-0 ring-4 ring-blue-950 bg-blue-900 ${
-              show.heroImage ? "-mt-16 md:-mt-24 lg:-mt-32" : ""
-            }`}
-          >
-            <Image
-              src={show.thumbnail.regular.large}
-              fill
-              alt={show.title}
-              className="object-contain"
-              sizes="240px"
-              onLoad={() => setPosterLoaded(true)}
-              onError={() => setPosterLoaded(true)}
-            />
-          </div>
+          {/* Gradients for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-blue-950 via-blue-950/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-950/80 via-blue-950/10 to-transparent" />
 
-          {/* Info */}
-          <div className="flex flex-col gap-4 lg:gap-6 flex-1 min-w-0">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-preset-1 text-white">{show.title}</h1>
-              {show.tagline && (
-                <p className="text-preset-4 text-blue-500 italic">
-                  {show.tagline}
-                </p>
-              )}
-            </div>
+          {/* Overlaid title/meta/CTA */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 lg:gap-4 p-4 md:p-8 lg:p-12 max-w-2xl">
+            <h1 className="text-preset-1 text-white">{show.title}</h1>
 
-            <div className="flex flex-wrap items-center gap-[10px] text-preset-4 text-white/75">
+            {show.tagline && (
+              <p className="text-preset-4 text-white/70 italic">
+                {show.tagline}
+              </p>
+            )}
+
+            <div className="flex flex-wrap items-center gap-[10px] text-preset-4 text-white/90">
               {show.year > 0 && <span>{show.year}</span>}
-              <span className="size-[3px] rounded-full bg-white/75 shrink-0" />
+              <Dot />
               <span className="flex items-center gap-[6px]">
                 <Image src={categoryIcon} width={12} height={12} alt="" />
                 {show.category}
               </span>
-              <span className="size-[3px] rounded-full bg-white/75 shrink-0" />
+              <Dot />
               <span>{show.rating}</span>
               {show.runtimeLabel && (
                 <>
-                  <span className="size-[3px] rounded-full bg-white/75 shrink-0" />
+                  <Dot />
                   <span>{show.runtimeLabel}</span>
                 </>
               )}
               {show.voteAverage > 0 && (
                 <>
-                  <span className="size-[3px] rounded-full bg-white/75 shrink-0" />
+                  <Dot />
                   <span className="text-white">
                     ★ {show.voteAverage.toFixed(1)}
                   </span>
@@ -128,7 +114,7 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
                 {show.genres.map((genre) => (
                   <span
                     key={genre}
-                    className="text-preset-5 text-white/75 bg-blue-900 border border-blue-500 rounded-full px-3 py-1"
+                    className="text-preset-5 text-white bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1"
                   >
                     {genre}
                   </span>
@@ -136,15 +122,18 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
               </div>
             )}
 
-            <BookmarkButton slug={show.slug} variant="button" />
-
-            {show.overview && (
-              <p className="text-preset-4 text-white/75 max-w-prose">
-                {show.overview}
-              </p>
-            )}
+            <div className="pt-1">
+              <BookmarkButton slug={show.slug} variant="button" />
+            </div>
           </div>
         </div>
+
+        {show.overview && (
+          <section className="flex flex-col gap-3 max-w-3xl">
+            <h2 className="text-preset-2 text-white">Overview</h2>
+            <p className="text-preset-4 text-white/75">{show.overview}</p>
+          </section>
+        )}
 
         {show.cast.length > 0 && (
           <section className="flex flex-col gap-4 lg:gap-6">

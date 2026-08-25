@@ -43,7 +43,7 @@ export default function BookmarkButton({
       <button
         onClick={handleClick}
         disabled={isPending}
-        className="inline-flex items-center gap-3 w-fit bg-blue-900 border border-blue-500 text-white text-preset-4 rounded-lg px-5 py-3 hover:bg-white hover:text-blue-950 hover:border-white transition-colors group disabled:opacity-75"
+        className="inline-flex items-center gap-3 w-fit bg-white/10 backdrop-blur-md border border-white/30 text-white text-preset-4 rounded-lg px-5 py-3 hover:bg-white hover:text-blue-950 hover:border-white transition-colors group disabled:opacity-75"
       >
         <Image
           src={iconSrc}
