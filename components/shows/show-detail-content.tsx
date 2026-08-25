@@ -54,12 +54,23 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
 
         {/* Hero backdrop */}
         {show.heroImage && (
-          <div className="relative w-full h-[180px] md:h-[320px] lg:h-[420px] rounded-lg overflow-hidden">
+          <div className="relative w-full h-[180px] md:h-[320px] lg:h-[420px] rounded-lg overflow-hidden bg-blue-900">
+            {/* Blurred, scaled-up fill so the box never shows empty space
+                around the real image below — purely decorative. */}
             <Image
               src={show.heroImage}
               fill
               alt=""
-              className="object-cover"
+              aria-hidden="true"
+              className="object-cover scale-110 blur-2xl opacity-60"
+              sizes="100vw"
+            />
+            {/* The actual backdrop, shown in full — nothing cropped off. */}
+            <Image
+              src={show.heroImage}
+              fill
+              alt=""
+              className="object-contain"
               sizes="100vw"
               priority
               onLoad={() => setHeroLoaded(true)}
@@ -72,7 +83,7 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
         <div className="flex flex-col md:flex-row gap-6 lg:gap-10">
           {/* Poster */}
           <div
-            className={`relative w-[140px] md:w-[200px] lg:w-[240px] aspect-[2/3] rounded-lg overflow-hidden shrink-0 mx-auto md:mx-0 ring-4 ring-blue-950 ${
+            className={`relative w-[140px] md:w-[200px] lg:w-[240px] aspect-[2/3] rounded-lg overflow-hidden shrink-0 mx-auto md:mx-0 ring-4 ring-blue-950 bg-blue-900 ${
               show.heroImage ? "-mt-16 md:-mt-24 lg:-mt-32" : ""
             }`}
           >
@@ -80,7 +91,7 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
               src={show.thumbnail.regular.large}
               fill
               alt={show.title}
-              className="object-cover"
+              className="object-contain"
               sizes="240px"
               onLoad={() => setPosterLoaded(true)}
               onError={() => setPosterLoaded(true)}
