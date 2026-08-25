@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShowDetail } from "@/lib/tmdb";
+import { getCategoryIcon } from "@/lib/category-icon";
 import BookmarkButton from "./bookmark-button";
 import LoadingScreen from "./loading-screen";
 
@@ -16,10 +17,7 @@ export default function ShowDetailContent({ show }: ShowDetailContentProps) {
   const [posterLoaded, setPosterLoaded] = useState(false);
   const ready = heroLoaded && posterLoaded;
 
-  const categoryIcon =
-    show.category === "Movie"
-      ? "/assets/icon-category-movie.svg"
-      : "/assets/icon-category-tv.svg";
+  const categoryIcon = getCategoryIcon(show.category);
 
   return (
     <div className="relative min-h-[60vh]">

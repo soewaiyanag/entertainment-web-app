@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Show } from "@/types/show.type";
+import { getCategoryIcon } from "@/lib/category-icon";
 import BookmarkButton from "./bookmark-button";
 
 interface ShowCardProps {
@@ -10,11 +11,7 @@ interface ShowCardProps {
 }
 
 export default function ShowCard({ show }: ShowCardProps) {
-  const categoryIcon =
-    show.category === "Movie"
-      ? "/assets/icon-category-movie.svg"
-      : "/assets/icon-category-tv.svg";
-
+  const categoryIcon = getCategoryIcon(show.category);
   const imageSrc = show.thumbnail.regular.large;
 
   return (

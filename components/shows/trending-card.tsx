@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Show } from "@/types/show.type";
+import { getCategoryIcon } from "@/lib/category-icon";
 import BookmarkButton from "./bookmark-button";
 
 interface TrendingCardProps {
@@ -10,11 +11,7 @@ interface TrendingCardProps {
 }
 
 export default function TrendingCard({ show }: TrendingCardProps) {
-  const categoryIcon =
-    show.category === "Movie"
-      ? "/assets/icon-category-movie.svg"
-      : "/assets/icon-category-tv.svg";
-
+  const categoryIcon = getCategoryIcon(show.category);
   const imageSrc = show.thumbnail.trending!.large;
 
   return (

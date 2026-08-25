@@ -82,6 +82,17 @@ function tmdbImage(path: string | null, size: string): string | undefined {
   return path ? `${TMDB_IMAGE_BASE_URL}/${size}${path}` : undefined;
 }
 
+// Bookmarks encode their TMDb id as "movie-<id>"/"tv-<id>" (see mapToShow
+// below) so lookups stay unambiguous across TMDb's separate movie/TV id
+// spaces. This is the one place that decodes it back.
+function parseCompositeSlug(
+  slug: string
+): { mediaType: TMDbMediaType; id: string } | null {
+  const [mediaType, id] = slug.split("-");
+  if (mediaType !== "movie" && mediaType !== "tv") return null;
+  return { mediaType, id };
+}
+
 function mapToShow(
   item: TMDbRawItem,
   mediaType: TMDbMediaType,
@@ -117,21 +128,36 @@ function mapToShow(
   };
 }
 
+// Maps a page of raw TMDb results to Shows, dropping any that mapToShow
+// rejects (e.g. no poster). `getMediaType` lets callers pass either a fixed
+// type (a single-media-type endpoint) or a per-item lookup (mixed endpoints
+// like trending/search-multi, which tag each result with its own type).
+function toShows(
+  items: TMDbRawItem[],
+  getMediaType: (item: TMDbRawItem) => TMDbMediaType,
+  isTrending = false
+): Show[] {
+  return items
+    .map((r) => mapToShow(r, getMediaType(r), isTrending))
+    .filter((s): s is Show => s !== null);
+}
+
+function isMovieOrTV(item: TMDbRawItem): boolean {
+  return item.media_type === "movie" || item.media_type === "tv";
+}
+
 export async function getTrending(): Promise<Show[]> {
   const data = await tmdbFetch<TMDbListResponse>("/trending/all/day");
+  const items = data.results.filter(isMovieOrTV);
 
-  return data.results
-    .filter((r) => r.media_type === "movie" || r.media_type === "tv")
-    .map((r) => mapToShow(r, r.media_type as TMDbMediaType, true))
-    .filter((s): s is Show => s !== null && !!s.thumbnail.trending);
+  return toShows(items, (r) => r.media_type as TMDbMediaType, true).filter(
+    (s) => !!s.thumbnail.trending
+  );
 }
 
 export async function getPopular(mediaType: TMDbMediaType): Promise<Show[]> {
   const data = await tmdbFetch<TMDbListResponse>(`/${mediaType}/popular`);
-
-  return data.results
-    .map((r) => mapToShow(r, mediaType))
-    .filter((s): s is Show => s !== null);
+  return toShows(data.results, () => mediaType);
 }
 
 export async function searchShows(
@@ -144,16 +170,12 @@ export async function searchShows(
     const data = await tmdbFetch<TMDbListResponse>(`/search/${mediaType}`, {
       query,
     });
-    return data.results
-      .map((r) => mapToShow(r, mediaType))
-      .filter((s): s is Show => s !== null);
+    return toShows(data.results, () => mediaType);
   }
 
   const data = await tmdbFetch<TMDbListResponse>("/search/multi", { query });
-  return data.results
-    .filter((r) => r.media_type === "movie" || r.media_type === "tv")
-    .map((r) => mapToShow(r, r.media_type as TMDbMediaType))
-    .filter((s): s is Show => s !== null);
+  const items = data.results.filter(isMovieOrTV);
+  return toShows(items, (r) => r.media_type as TMDbMediaType);
 }
 
 async function getShowById(
@@ -168,11 +190,28 @@ async function getShowById(
   }
 }
 
+// Movies show a duration ("2h 14m"); TV shows show a season count instead,
+// since TMDb doesn't give a single meaningful runtime for a whole series.
+function formatRuntimeLabel(
+  mediaType: TMDbMediaType,
+  runtimeMinutes: number | undefined,
+  numberOfSeasons: number | undefined
+): string | undefined {
+  if (mediaType === "movie") {
+    if (!runtimeMinutes) return undefined;
+    return `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m`;
+  }
+
+  if (!numberOfSeasons) return undefined;
+  return `${numberOfSeasons} season${numberOfSeasons !== 1 ? "s" : ""}`;
+}
+
 export async function getShowDetail(
   compositeSlug: string
 ): Promise<ShowDetail | null> {
-  const [mediaType, id] = compositeSlug.split("-");
-  if (mediaType !== "movie" && mediaType !== "tv") return null;
+  const parsed = parseCompositeSlug(compositeSlug);
+  if (!parsed) return null;
+  const { mediaType, id } = parsed;
 
   let raw: TMDbDetailRaw;
   try {
@@ -188,15 +227,11 @@ export async function getShowDetail(
 
   const runtimeMinutes =
     mediaType === "movie" ? raw.runtime : raw.episode_run_time?.[0];
-
-  const runtimeLabel =
-    mediaType === "movie"
-      ? runtimeMinutes
-        ? `${Math.floor(runtimeMinutes / 60)}h ${runtimeMinutes % 60}m`
-        : undefined
-      : raw.number_of_seasons
-        ? `${raw.number_of_seasons} season${raw.number_of_seasons !== 1 ? "s" : ""}`
-        : undefined;
+  const runtimeLabel = formatRuntimeLabel(
+    mediaType,
+    runtimeMinutes,
+    raw.number_of_seasons
+  );
 
   return {
     ...base,
@@ -219,9 +254,8 @@ export async function getShowsByCompositeIds(
 ): Promise<Show[]> {
   const results = await Promise.all(
     compositeIds.map((composite) => {
-      const [mediaType, id] = composite.split("-");
-      if (mediaType !== "movie" && mediaType !== "tv") return null;
-      return getShowById(mediaType, id);
+      const parsed = parseCompositeSlug(composite);
+      return parsed ? getShowById(parsed.mediaType, parsed.id) : null;
     })
   );
 

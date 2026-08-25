@@ -17,6 +17,9 @@ export default function BookmarkButton({
   const { bookmarks, addBookmark, removeBookmark } = useBookmarkStore();
   const isBookmarked = bookmarks.includes(slug);
   const [isPending, startTransition] = useTransition();
+  const iconSrc = isBookmarked
+    ? "/assets/icon-bookmark-full.svg"
+    : "/assets/icon-bookmark-empty.svg";
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
@@ -43,11 +46,7 @@ export default function BookmarkButton({
         className="inline-flex items-center gap-3 w-fit bg-blue-900 border border-blue-500 text-white text-preset-4 rounded-lg px-5 py-3 hover:bg-white hover:text-blue-950 hover:border-white transition-colors group disabled:opacity-75"
       >
         <Image
-          src={
-            isBookmarked
-              ? "/assets/icon-bookmark-full.svg"
-              : "/assets/icon-bookmark-empty.svg"
-          }
+          src={iconSrc}
           width={12}
           height={14}
           alt=""
@@ -66,11 +65,7 @@ export default function BookmarkButton({
       className="size-8 rounded-full bg-blue-950/50 flex items-center justify-center hover:bg-white transition-colors group disabled:opacity-75"
     >
       <Image
-        src={
-          isBookmarked
-            ? "/assets/icon-bookmark-full.svg"
-            : "/assets/icon-bookmark-empty.svg"
-        }
+        src={iconSrc}
         width={12}
         height={14}
         alt=""

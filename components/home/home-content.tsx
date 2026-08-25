@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { Show } from "@/types/show.type";
-import { searchShowsAction } from "@/app/actions/shows";
+import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import SearchBar from "@/components/ui/search-bar";
 import TrendingCard from "@/components/shows/trending-card";
 import ShowCard from "@/components/shows/show-card";
@@ -17,23 +17,8 @@ export default function HomeContent({
   recommendedShows,
 }: HomeContentProps) {
   const [query, setQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Show[]>([]);
-  const [isPending, startTransition] = useTransition();
-
   const trimmed = query.trim();
-
-  useEffect(() => {
-    if (!trimmed) return;
-
-    const timeout = setTimeout(() => {
-      startTransition(async () => {
-        const results = await searchShowsAction(trimmed);
-        setSearchResults(results);
-      });
-    }, 400);
-
-    return () => clearTimeout(timeout);
-  }, [trimmed]);
+  const { results: searchResults, isPending } = useDebouncedSearch(trimmed);
 
   return (
     <div className="flex flex-col gap-6 lg:gap-10">

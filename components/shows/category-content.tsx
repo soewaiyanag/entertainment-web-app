@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { Show } from "@/types/show.type";
-import { searchShowsAction } from "@/app/actions/shows";
+import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import SearchBar from "@/components/ui/search-bar";
 import ShowCard from "@/components/shows/show-card";
 
@@ -20,25 +20,21 @@ export default function CategoryContent({
   searchPlaceholder,
 }: CategoryContentProps) {
   const [query, setQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Show[]>([]);
-  const [isPending, startTransition] = useTransition();
-
   const trimmed = query.trim();
-
-  useEffect(() => {
-    if (!trimmed) return;
-
-    const timeout = setTimeout(() => {
-      startTransition(async () => {
-        const results = await searchShowsAction(trimmed, mediaType);
-        setSearchResults(results);
-      });
-    }, 400);
-
-    return () => clearTimeout(timeout);
-  }, [trimmed, mediaType]);
+  const { results: searchResults, isPending } = useDebouncedSearch(
+    trimmed,
+    mediaType
+  );
 
   const displayed = trimmed ? searchResults : shows;
+
+  const headingText = !trimmed
+    ? heading
+    : isPending
+      ? "Searching…"
+      : `Found ${displayed.length} result${
+          displayed.length !== 1 ? "s" : ""
+        } for ‘${trimmed}’`;
 
   return (
     <div className="flex flex-col gap-6 lg:gap-10">
@@ -49,15 +45,7 @@ export default function CategoryContent({
       />
 
       <section className="flex flex-col gap-4 lg:gap-8">
-        <h2 className="text-preset-1 text-white">
-          {trimmed
-            ? isPending
-              ? "Searching…"
-              : `Found ${displayed.length} result${
-                  displayed.length !== 1 ? "s" : ""
-                } for ‘${trimmed}’`
-            : heading}
-        </h2>
+        <h2 className="text-preset-1 text-white">{headingText}</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-x-6 lg:gap-x-10 lg:gap-y-6">
           {displayed.map((show) => (
             <ShowCard key={show.slug} show={show} />
