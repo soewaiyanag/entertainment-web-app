@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Show } from "@/types/show.type";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
+import { loadMoreShowsAction } from "@/app/actions/shows";
 import SearchBar from "@/components/ui/search-bar";
 import ShowCard from "@/components/shows/show-card";
 
 interface CategoryContentProps {
   shows: Show[];
+  hasMore: boolean;
   mediaType: "movie" | "tv";
   heading: string;
   searchPlaceholder: string;
@@ -15,6 +17,7 @@ interface CategoryContentProps {
 
 export default function CategoryContent({
   shows,
+  hasMore,
   mediaType,
   heading,
   searchPlaceholder,
@@ -26,7 +29,22 @@ export default function CategoryContent({
     mediaType
   );
 
-  const displayed = trimmed ? searchResults : shows;
+  const [items, setItems] = useState(shows);
+  const [page, setPage] = useState(1);
+  const [canLoadMore, setCanLoadMore] = useState(hasMore);
+  const [isLoadingMore, startLoadingMore] = useTransition();
+
+  function handleLoadMore() {
+    startLoadingMore(async () => {
+      const nextPage = page + 1;
+      const nextResult = await loadMoreShowsAction(mediaType, nextPage);
+      setItems((current) => [...current, ...nextResult.shows]);
+      setCanLoadMore(nextResult.hasMore);
+      setPage(nextPage);
+    });
+  }
+
+  const displayed = trimmed ? searchResults : items;
 
   const headingText = !trimmed
     ? heading
@@ -51,6 +69,16 @@ export default function CategoryContent({
             <ShowCard key={show.slug} show={show} />
           ))}
         </div>
+
+        {!trimmed && canLoadMore && (
+          <button
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className="self-center bg-blue-900 border border-blue-500 text-white text-preset-4 rounded-lg px-6 py-3 hover:bg-white hover:text-blue-950 hover:border-white transition-colors disabled:opacity-50"
+          >
+            {isLoadingMore ? "Loading…" : "Load More"}
+          </button>
+        )}
       </section>
     </div>
   );

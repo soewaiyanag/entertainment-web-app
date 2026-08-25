@@ -19,6 +19,8 @@ interface TMDbRawItem {
 
 interface TMDbListResponse {
   results: TMDbRawItem[];
+  page: number;
+  total_pages: number;
 }
 
 interface TMDbCastMember {
@@ -42,6 +44,11 @@ export interface CastMember {
   name: string;
   character: string;
   profileImage?: string;
+}
+
+export interface ShowPage {
+  shows: Show[];
+  hasMore: boolean;
 }
 
 export interface ShowDetail extends Show {
@@ -155,9 +162,18 @@ export async function getTrending(): Promise<Show[]> {
   );
 }
 
-export async function getPopular(mediaType: TMDbMediaType): Promise<Show[]> {
-  const data = await tmdbFetch<TMDbListResponse>(`/${mediaType}/popular`);
-  return toShows(data.results, () => mediaType);
+export async function getPopular(
+  mediaType: TMDbMediaType,
+  page = 1
+): Promise<ShowPage> {
+  const data = await tmdbFetch<TMDbListResponse>(`/${mediaType}/popular`, {
+    page: String(page),
+  });
+
+  return {
+    shows: toShows(data.results, () => mediaType),
+    hasMore: data.page < data.total_pages,
+  };
 }
 
 export async function searchShows(

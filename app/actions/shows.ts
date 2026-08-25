@@ -1,6 +1,7 @@
 "use server";
 
-import { getShowsByCompositeIds, searchShows } from "@/lib/tmdb";
+import { getPopular, getShowsByCompositeIds, searchShows } from "@/lib/tmdb";
+import type { ShowPage } from "@/lib/tmdb";
 import { Show } from "@/types/show.type";
 
 export async function searchShowsAction(
@@ -8,6 +9,13 @@ export async function searchShowsAction(
   mediaType?: "movie" | "tv"
 ): Promise<Show[]> {
   return searchShows(query, mediaType);
+}
+
+export async function loadMoreShowsAction(
+  mediaType: "movie" | "tv",
+  page: number
+): Promise<ShowPage> {
+  return getPopular(mediaType, page);
 }
 
 export async function getBookmarkedShowsAction(

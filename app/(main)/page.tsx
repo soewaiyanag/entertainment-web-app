@@ -8,7 +8,7 @@ export default async function HomePage() {
     getPopular("tv"),
   ]);
 
-  const recommendedShows = [...popularMovies, ...popularTV];
+  const recommendedShows = [...popularMovies.shows, ...popularTV.shows];
 
   return (
     <HomeContent
