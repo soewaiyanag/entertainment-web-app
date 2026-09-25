@@ -74,8 +74,11 @@ export default function CategoryContent({
           <button
             onClick={handleLoadMore}
             disabled={isLoadingMore}
-            className="self-center bg-blue-900 border border-blue-500 text-white text-preset-4 rounded-lg px-6 py-3 hover:bg-white hover:text-blue-950 hover:border-white transition-colors disabled:opacity-50"
+            className="self-center inline-flex items-center gap-2 bg-red-500 text-white text-preset-4 rounded-lg px-8 py-3 cursor-pointer shadow-lg shadow-red-500/20 hover:bg-white hover:text-blue-950 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
           >
+            {isLoadingMore && (
+              <span className="size-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+            )}
             {isLoadingMore ? "Loading…" : "Load More"}
           </button>
         )}
