@@ -17,7 +17,7 @@ export default function ShowCard({ show }: ShowCardProps) {
   return (
     <Link href={`/show/${show.slug}`} className="flex flex-col gap-2">
       {/* Image */}
-      <div className="relative w-full h-[110px] md:h-[140px] lg:h-[174px] rounded-lg overflow-hidden group">
+      <div className="relative w-full aspect-[2/3] rounded-lg overflow-hidden group bg-blue-900">
         <Image
           src={imageSrc}
           fill
