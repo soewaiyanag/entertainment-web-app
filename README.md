@@ -37,7 +37,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [https://github.com/soewaiyanag/entertainment-web-app](https://github.com/soewaiyanag/entertainment-web-app)
-- Live Site URL: [https://entertainment-web-app-one-fawn.vercel.app/](https://entertainment-web-app-one-fawn.vercel.app/)
+- Live Site URL: [https://entertainment-web-app-soewaiyanag.vercel.app/](https://entertainment-web-app-soewaiyanag.vercel.app/)
 
 ## My process
 
