@@ -103,11 +103,7 @@ const prisma = new PrismaClient({ adapter });
 
 ### Working with an AI assistant
 
-This project was built in collaboration with an AI coding assistant ([Claude Code](https://claude.com/claude-code) by Anthropic), used deliberately rather than as an autocomplete-and-accept loop:
-
-- I made the product and architecture calls — what data source to use, how bookmarks should be keyed, when to trade off the original design for real-world data (e.g. switching to portrait poster art once real TMDb images made the original crop untenable) — and asked follow-up questions when an approach had trade-offs worth understanding.
-- Every non-trivial UI change was verified against a real, rendered page (via an automated headless-browser screenshot) rather than accepted on markup alone; a few changes that looked correct on paper were caught and reverted this way.
-- The assistant also handled the operational side: diagnosing a failed Vercel production build down to a missing environment variable, and fixing it directly through the Vercel API.
+Parts of this project were built with the help of an AI assistant (Claude Code), while I directed the architecture, product decisions, and review.
 
 ## Author
 
